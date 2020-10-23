@@ -92,7 +92,72 @@ result.groupBy(e -> e % 2)
 ```
 
 ``Group by (grouping values pair and odd):``
-<br/>
+
 ``0=[0, 2, 4, 6, 8]``
-<br/>
+
 ``1=[3, 5, 7, 9]``
+
+```
+Integer i = CollectionHelper.sum(arr0);
+System.out.printf("\nSum (all values in arr0):\n%d\n", i);
+
+i = CollectionHelper.sum(arr1);
+System.out.printf("\nSum (all values in arr1):\n%d\n", i);
+```
+
+``Sum (all values in arr0): 20``
+
+``Sum (all values in arr1): 26``
+
+```
+i = CollectionHelper.min(arr0);
+System.out.printf("\nMin (all values in arr0):\n%d\n", i);
+
+i = CollectionHelper.min(arr1);
+System.out.printf("\nMin (all values in arr1):\n%d\n", i);
+```
+
+``Min (all values in arr0): 0`` 
+ 
+``Min (all values in arr1): 2``
+
+```
+i = CollectionHelper.max(arr0);
+System.out.printf("\Max (all values in arr0):\n%d\n", i);
+
+i = CollectionHelper.max(arr1);
+System.out.printf("\Max (all values in arr1):\n%d\n", i);
+```
+
+``Max (all values in arr0): 8``  
+
+``Max (all values in arr1): 9``
+
+```
+i = CollectionHelper.mean(arr0);
+System.out.printf("\Mean (all values in arr0):\n%d\n", i);
+
+i = CollectionHelper.mean(arr1);
+System.out.printf("\Mean (all values in arr1):\n%d\n", i);
+```
+
+``Mean (all values in arr0): 4``  
+
+``Mean (all values in arr1): 5``
+
+```
+System.out.println("\nAny (value equals 2):");
+System.out.println(CollectionHelper.any(arr0, e -> e == 2));
+
+System.out.println("\nAll (values pair in arr0):");
+System.out.println(CollectionHelper.all(arr0, e -> e % 2 == 0));
+
+System.out.println("\nAll (values pair in arr1):");
+System.out.println(CollectionHelper.all(arr1, e -> e % 2 == 0));
+```
+
+``Any (value equals 2): true``
+
+``All (values pair in arr0): true``
+
+``All (values pair in arr1): false``
