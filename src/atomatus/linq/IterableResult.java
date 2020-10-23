@@ -351,4 +351,23 @@ public abstract class IterableResult<E> implements Iterable<E> {
     public boolean any(CollectionHelper.CompareEntryValid<E> action) {
         return CollectionHelper.any(this, action);
     }
+
+    /**
+     * Join all values how unique string, wheter value is a collection, set or array bring up theses datas
+     * to same level of current datas and join it, otherwise, set simple objects toString and join it too.
+     * @param separator data separator
+     * @return string result
+     */
+    public String join(String separator) {
+        return IteratorForJoin.join(null, null, separator, this);
+    }
+
+    /**
+     * Join all values how unique string, wheter value is a collection, set or array bring up theses datas
+     * to same level of current datas and join it, otherwise, set simple objects toString and join it too.
+     * @return string result
+     */
+    public String join() {
+        return IteratorForJoin.join(null, null, ", ", this);
+    }
 }

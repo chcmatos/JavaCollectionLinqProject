@@ -2,6 +2,7 @@ package atomatus;
 
 import atomatus.linq.CollectionHelper;
 import atomatus.linq.IterableResult;
+import atomatus.linq.IterableResultGroup;
 
 import java.util.Arrays;
 
@@ -31,9 +32,19 @@ public class Main {
                 .intersection(arr0, arr1)
                 .foreach(System.out::println);
 
+        System.out.println("\nGroup");
+        IterableResultGroup<Integer, Integer> group =
+                result.groupBy(e -> e % 2);
+
         System.out.println("\nGroup by (grouping values pair and odd):");
-        result.groupBy(e -> e % 2)
-                .foreach(System.out::println);
+        group.foreach(System.out::println);
+
+        System.out.println("\nGroup size (count of values in each group):");
+        group.size().foreach(System.out::println);
+
+        System.out.println("\nGroup sum (sum of all values in each group - ");
+        System.out.println("needs explicit set of Number class type or Function to sum operation):");
+        group.sum(Integer.class).foreach(System.out::println);
 
         Integer i = CollectionHelper.sum(arr0);
         System.out.printf("\nSum (all values in arr0):\n%d\n", i);
@@ -67,5 +78,6 @@ public class Main {
 
         System.out.println("\nAll (values pair in arr1):");
         System.out.println(CollectionHelper.all(arr1, e -> e % 2 == 0));
+
     }
 }

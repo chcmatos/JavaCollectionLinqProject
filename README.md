@@ -98,6 +98,30 @@ result.groupBy(e -> e % 2)
 ``1=[3, 5, 7, 9]``
 
 ```
+System.out.println("\nGroup size (count of values in each group):");
+group.size().foreach(System.out::println);
+```
+
+``Group size (count of values in each group):``
+
+``0=5``
+
+``1=4``
+
+
+```
+System.out.println("\nGroup sum (sum of all values in each group - needs explicit set of Number class type or Function to sum operation):");
+group.sum(Integer.class).foreach(System.out::println);
+```
+
+``Group sum (sum of all values in each group - needs explicit set of Number class type or Function to sum operation):``
+
+``0=20``
+
+``1=24``
+
+
+```
 Integer i = CollectionHelper.sum(arr0);
 System.out.printf("\nSum (all values in arr0):\n%d\n", i);
 

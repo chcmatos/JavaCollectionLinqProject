@@ -13,13 +13,13 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
         private final CollectionHelper.FunctionMount<IN, Entry<K, V>> mountFun;
 
         LazyReadOnlyMap(Iterable<IN> input,
-                        CollectionHelper.FunctionMount<IN, Entry<K, V>> mountFun){
+                        CollectionHelper.FunctionMount<IN, Entry<K, V>> mountFun) {
             this.input = input;
             this.mountFun = mountFun;
         }
 
-        private synchronized Set<Entry<K, V>> getSet(){
-            if(set == null){
+        private synchronized Set<Entry<K, V>> getSet() {
+            if (set == null) {
                 set = CollectionHelper.select(input, mountFun).toSet();
             }
             return set;
@@ -47,9 +47,9 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
 
         @Override
         public V get(Object key) {
-            for(Entry<K, V> entry : getSet()){
+            for (Entry<K, V> entry : getSet()) {
                 K k = entry.getKey();
-                if(k == key || key.equals(k)) {
+                if (k == key || key.equals(k)) {
                     return entry.getValue();
                 }
             }
@@ -78,15 +78,15 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
 
         @Override
         public Set<K> keySet() {
-            if(keySet == null){
-               keySet = CollectionHelper.select(getSet(), Entry::getKey).toSet();
+            if (keySet == null) {
+                keySet = CollectionHelper.select(getSet(), Entry::getKey).toSet();
             }
             return keySet;
         }
 
         @Override
         public Collection<V> values() {
-            if(values == null){
+            if (values == null) {
                 values = CollectionHelper.select(getSet(), Entry::getValue).toList();
             }
             return values;
@@ -96,10 +96,28 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
         public Set<Entry<K, V>> entrySet() {
             return getSet();
         }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder().append("[");
+            List<Entry<K, V>> list = new ArrayList<>(getSet());
+            char eq     = '=';
+            String sep  = ", ";
+            for (int i = 0, l = list.size(), j = l - 1; i < l; i++) {
+                Entry<K, V> e = list.get(i);
+                sb.append(e.getKey())
+                        .append(eq)
+                        .append(IteratorForJoin.toString(e.getValue()));
+                if (i < j) {
+                    sb.append(sep);
+                }
+            }
+            return sb.append("]").toString();
+        }
     }
 
     static <IN, K, V> IteratorForMap<K, V> getInstanceForLazyReadOnlyMap(Iterable<IN> input,
-                                                              CollectionHelper.FunctionMount<IN, Map.Entry<K, V>> mountFun){
+                                                                         CollectionHelper.FunctionMount<IN, Map.Entry<K, V>> mountFun) {
         return new IteratorForMap<K, V>() {
             @Override
             protected Map<K, V> initResult() {

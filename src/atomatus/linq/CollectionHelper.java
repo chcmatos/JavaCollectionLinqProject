@@ -759,8 +759,10 @@ public final class CollectionHelper {
     //endregion
 
     //region intersection
+
     /**
      * Intersection of two or more collections.
+     *
      * @param args one or more iterable.
      * @param <I>  iterable base type
      * @return new iterable result.
@@ -772,6 +774,7 @@ public final class CollectionHelper {
 
     /**
      * Intersection of two or more collections.
+     *
      * @param args one or more iterable.
      * @param <I>  iterable base type
      * @return new iterable result.
@@ -1023,9 +1026,9 @@ public final class CollectionHelper {
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
      * @param iterator target
-     * @param fun function to get target number
-     * @param <IN> collection element type
-     * @param <OUT> result number type
+     * @param fun      function to get target number
+     * @param <IN>     collection element type
+     * @param <OUT>    result number type
      * @return result number
      */
     public static <IN, OUT extends Number> OUT mean(Iterator<IN> iterator, FunctionMount<IN, OUT> fun) {
@@ -1037,9 +1040,9 @@ public final class CollectionHelper {
      * In Statistics, the definition of the mean is similar to the average.<br/>
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
-     * @param col target
-     * @param fun function to get target number
-     * @param <IN> collection element type
+     * @param col   target
+     * @param fun   function to get target number
+     * @param <IN>  collection element type
      * @param <OUT> result number type
      * @return result number
      */
@@ -1052,9 +1055,9 @@ public final class CollectionHelper {
      * In Statistics, the definition of the mean is similar to the average.<br/>
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
-     * @param arr target
-     * @param fun function to get target number
-     * @param <IN> collection element type
+     * @param arr   target
+     * @param fun   function to get target number
+     * @param <IN>  collection element type
      * @param <OUT> result number type
      * @return result number
      */
@@ -1068,7 +1071,7 @@ public final class CollectionHelper {
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
      * @param iterator target
-     * @param <IN> collection element number type
+     * @param <IN>     collection element number type
      * @return result number
      */
     public static <IN extends Number> IN mean(Iterator<IN> iterator) {
@@ -1080,7 +1083,7 @@ public final class CollectionHelper {
      * In Statistics, the definition of the mean is similar to the average.<br/>
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
-     * @param col function to get target number
+     * @param col  function to get target number
      * @param <IN> collection element number type
      * @return result number
      */
@@ -1093,7 +1096,7 @@ public final class CollectionHelper {
      * In Statistics, the definition of the mean is similar to the average.<br/>
      * But, it can also be defined as the sum of the smallest value and the largest value in the given data set divided by 2.
      *
-     * @param arr target
+     * @param arr  target
      * @param <IN> collection element number type
      * @return result number
      */
@@ -1106,10 +1109,11 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
+     *
      * @param iterator target
-     * @param fun function to get Comparable element target
-     * @param <IN> collection element
-     * @param <OUT> result comparable element
+     * @param fun      function to get Comparable element target
+     * @param <IN>     collection element
+     * @param <OUT>    result comparable element
      * @return minimal value
      */
     public static <IN, OUT extends Comparable<OUT>> OUT min(Iterator<IN> iterator, FunctionMount<IN, OUT> fun) {
@@ -1118,6 +1122,7 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
+     *
      * @param <OUT> result comparable element
      * @return minimal value
      */
@@ -1127,9 +1132,10 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
-     * @param arr target
-     * @param fun function to get Comparable element target
-     * @param <IN> collection element
+     *
+     * @param arr   target
+     * @param fun   function to get Comparable element target
+     * @param <IN>  collection element
      * @param <OUT> result comparable element
      * @return minimum value
      */
@@ -1139,8 +1145,9 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
+     *
      * @param iterator target
-     * @param <E> collection comparable element
+     * @param <E>      collection comparable element
      * @return minimum value
      */
     public static <E extends Comparable<E>> E min(Iterator<E> iterator) {
@@ -1149,6 +1156,7 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
+     *
      * @param col target
      * @param <E> collection comparable element
      * @return minimum value
@@ -1159,6 +1167,7 @@ public final class CollectionHelper {
 
     /**
      * Recover minimum value of collection
+     *
      * @param arr target
      * @param <E> collection comparable element
      * @return minimum value
@@ -1172,10 +1181,11 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
+     *
      * @param iterator target
-     * @param fun function to get Comparable element target
-     * @param <IN> collection element
-     * @param <OUT> result comparable element
+     * @param fun      function to get Comparable element target
+     * @param <IN>     collection element
+     * @param <OUT>    result comparable element
      * @return maximum value
      */
     public static <IN, OUT extends Comparable<OUT>> OUT max(Iterator<IN> iterator, FunctionMount<IN, OUT> fun) {
@@ -1184,9 +1194,10 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
-     * @param col target
-     * @param fun function to get Comparable element target
-     * @param <IN> collection element
+     *
+     * @param col   target
+     * @param fun   function to get Comparable element target
+     * @param <IN>  collection element
      * @param <OUT> result comparable element
      * @return maximum value
      */
@@ -1196,9 +1207,10 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
-     * @param arr target
-     * @param fun function to get Comparable element target
-     * @param <IN> collection element
+     *
+     * @param arr   target
+     * @param fun   function to get Comparable element target
+     * @param <IN>  collection element
      * @param <OUT> result comparable element
      * @return maximum value
      */
@@ -1208,8 +1220,9 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
+     *
      * @param iterator target
-     * @param <E> collection comparable element
+     * @param <E>      collection comparable element
      * @return maximum value
      */
     public static <E extends Comparable<E>> E max(Iterator<E> iterator) {
@@ -1218,6 +1231,7 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
+     *
      * @param col target
      * @param <E> collection comparable element
      * @return maximum value
@@ -1228,6 +1242,7 @@ public final class CollectionHelper {
 
     /**
      * Recover maximum value of collection
+     *
      * @param arr target
      * @param <E> collection comparable element
      * @return maximum value
@@ -1242,9 +1257,10 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
+     *
      * @param iterator target
-     * @param mount function to mount output distinct value
-     * @param <OUT> output type
+     * @param mount    function to mount output distinct value
+     * @param <OUT>    output type
      * @return new iterable result with distinct elements.
      */
     public static <IN, OUT> IterableResult<OUT> distinct(Iterator<IN> iterator, FunctionMount<IN, OUT> mount) {
@@ -1253,7 +1269,8 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
-     * @param col target
+     *
+     * @param col   target
      * @param mount function to mount output distinct value
      * @param <OUT> output type
      * @return new iterable result with distinct elements.
@@ -1264,7 +1281,8 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
-     * @param arr target
+     *
+     * @param arr   target
      * @param mount function to mount output distinct value
      * @param <OUT> output type
      * @return new iterable result with distinct elements.
@@ -1275,6 +1293,7 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
+     *
      * @param iterator target
      * @return new iterable result with distinct elements.
      */
@@ -1284,6 +1303,7 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
+     *
      * @param col target
      * @return new iterable result with distinct elements.
      */
@@ -1293,6 +1313,7 @@ public final class CollectionHelper {
 
     /**
      * Recover distinct (non duplicated) element of collection
+     *
      * @param arr target
      * @return new iterable result with distinct elements.
      */
@@ -1304,10 +1325,11 @@ public final class CollectionHelper {
     //region foreach
 
     /**
-     *  A simple foreach action.
-     * @param list target
+     * A simple foreach action.
+     *
+     * @param list   target
      * @param action action to recover each element on collection
-     * @param <I> collection element type
+     * @param <I>    collection element type
      */
     public static <I> void foreach(Iterable<I> list, ForEachEntryConsumer<I> action) {
         Objects.requireNonNull(list);
@@ -1316,10 +1338,11 @@ public final class CollectionHelper {
     }
 
     /**
-     *  A simple foreach action.
-     * @param list target
+     * A simple foreach action.
+     *
+     * @param list   target
      * @param action action with entry index to recover each element on collection
-     * @param <I> collection element type
+     * @param <I>    collection element type
      */
     public static <I> void foreach(Iterable<I> list, ForEachIterableEntryConsumer<I> action) {
         Objects.requireNonNull(list);
@@ -1329,10 +1352,11 @@ public final class CollectionHelper {
     }
 
     /**
-     *  A simple foreach action.
-     * @param arr target
+     * A simple foreach action.
+     *
+     * @param arr    target
      * @param action action to recover each element on collection
-     * @param <I> collection element type
+     * @param <I>    collection element type
      */
     public static <I> void foreach(I[] arr, ForEachEntryConsumer<I> action) {
         Objects.requireNonNull(arr);
@@ -1341,10 +1365,11 @@ public final class CollectionHelper {
     }
 
     /**
-     *  A simple foreach action.
-     * @param arr target
+     * A simple foreach action.
+     *
+     * @param arr    target
      * @param action action with entry index to recover each element on collection
-     * @param <I> collection element type
+     * @param <I>    collection element type
      */
     public static <I> void foreach(I[] arr, ForEachIterableEntryConsumer<I> action) {
         Objects.requireNonNull(arr);
@@ -1357,7 +1382,8 @@ public final class CollectionHelper {
 
     /**
      * Check if all elements on iterable pass on test action.
-     * @param list target
+     *
+     * @param list   target
      * @param action check pass action
      * @return return true when all elements on collection pass on test action.
      */
@@ -1374,7 +1400,8 @@ public final class CollectionHelper {
 
     /**
      * Check if all elements on iterable pass on test action.
-     * @param arr target
+     *
+     * @param arr    target
      * @param action check pass action
      * @return return true when all elements on collection pass on test action.
      */
@@ -1394,7 +1421,8 @@ public final class CollectionHelper {
 
     /**
      * Check if at least one element on iterable pass on test action.
-     * @param list target
+     *
+     * @param list   target
      * @param action check pass action
      * @return return true when at least one element on collection pass on test action.
      */
@@ -1411,7 +1439,8 @@ public final class CollectionHelper {
 
     /**
      * Check if at least one element on iterable pass on test action.
-     * @param arr target
+     *
+     * @param arr    target
      * @param action check pass action
      * @return return true when at least one element on collection pass on test action.
      */
@@ -1432,9 +1461,10 @@ public final class CollectionHelper {
     /**
      * How like literally named, "jump" elements on collection
      * returning all others elements after offset count it.
-     * @param set target
+     *
+     * @param set   target
      * @param count count of elements will be discarted
-     * @param <I> element type
+     * @param <I>   element type
      * @return new iterable result with non elements after offset count.
      */
     public static <I> IterableResult<I> jump(Iterable<I> set, int count) {
@@ -1444,9 +1474,10 @@ public final class CollectionHelper {
     /**
      * How like literally named, "jump" elements on collection
      * returning all others elements after offset count it.
+     *
      * @param iterator target
-     * @param count count of elements will be discarted
-     * @param <I> element type
+     * @param count    count of elements will be discarted
+     * @param <I>      element type
      * @return new iterable result with non elements after offset count.
      */
     public static <I> IterableResult<I> jump(final Iterator<I> iterator, int count) {
@@ -1458,9 +1489,10 @@ public final class CollectionHelper {
 
     /**
      * Take only amount of elements set on count.
-     * @param set target
+     *
+     * @param set   target
      * @param count count of elements
-     * @param <I> element type
+     * @param <I>   element type
      * @return new iterable result with taked elements.
      */
     public static <I> IterableResult<I> take(Iterable<I> set, int count) {
@@ -1469,9 +1501,10 @@ public final class CollectionHelper {
 
     /**
      * Take only amount of elements set on count.
+     *
      * @param iterator target
-     * @param count count of elements
-     * @param <I> element type
+     * @param count    count of elements
+     * @param <I>      element type
      * @return new iterable result with taked elements.
      */
 
@@ -1484,6 +1517,7 @@ public final class CollectionHelper {
 
     /**
      * Count of elements on iterable.
+     *
      * @param set target
      * @return total elements on iterable.
      */
@@ -1497,6 +1531,43 @@ public final class CollectionHelper {
             for (Object i : set) c++;
             return c;
         }
+    }
+    //endregion
+
+    //region join
+
+    /**
+     * Join all values how unique string, wheter value is a collection, set or array bring up theses datas
+     * to same level of current datas and join it, otherwise, set simple objects toString and join it too.
+     * @param prefix prefix of string result
+     * @param suffix sufix of string result
+     * @param separator data separator
+     * @param args target arguments
+     * @return string result
+     */
+    public static String join(String prefix, String suffix, String separator, Object... args) {
+        return IteratorForJoin.join(prefix, suffix, separator, args);
+    }
+
+    /**
+     * Join all values how unique string, wheter value is a collection, set or array bring up theses datas
+     * to same level of current datas and join it, otherwise, set simple objects toString and join it too.
+     * @param separator data separator
+     * @param args target arguments
+     * @return string result
+     */
+    public static String join(String separator, Object... args) {
+        return IteratorForJoin.join(null, null, separator, args);
+    }
+
+    /**
+     * Join all values how unique string, wheter value is a collection, set or array bring up theses datas
+     * to same level of current datas and join it, otherwise, set simple objects toString and join it too.
+     * @param args target arguments
+     * @return string result
+     */
+    public static String join(Object... args) {
+        return IteratorForJoin.join(null, null, ", ", args);
     }
     //endregion
 
