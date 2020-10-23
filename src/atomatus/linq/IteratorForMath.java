@@ -111,8 +111,6 @@ final class IteratorForMath {
             return (OUT) valueOrDefault(n, Number::floatValue, IteratorForMath::defaultFloat);
         } else if (resultClass == Double.class) {
             return (OUT) valueOrDefault(n, Number::doubleValue, IteratorForMath::defaultDouble);
-        } else if (resultClass == Float.class) {
-            return (OUT) valueOrDefault(n, Number::floatValue, IteratorForMath::defaultFloat);
         } else if (resultClass == BigInteger.class || BigInteger.class.isAssignableFrom(resultClass)) {
             return (OUT) valueOrDefault(n, IteratorForMath::bigIntegerValue, IteratorForMath::defaultBigInteger);
         } else if (resultClass == BigDecimal.class || BigDecimal.class.isAssignableFrom(resultClass)) {
@@ -135,8 +133,6 @@ final class IteratorForMath {
             return (OUT) Float.valueOf(n);
         } else if (resultClass == Double.class) {
             return (OUT) Double.valueOf(n);
-        } else if (resultClass == Float.class) {
-            return (OUT) Float.valueOf(n);
         } else if (resultClass == BigInteger.class || BigInteger.class.isAssignableFrom(resultClass)) {
             return (OUT) new BigInteger(n);
         } else if (resultClass == BigDecimal.class || BigDecimal.class.isAssignableFrom(resultClass)) {
