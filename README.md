@@ -86,9 +86,9 @@ Intersection:
 ``
 
 ```
+IterableResultGroup<Integer, Integer> group = result.groupBy(e -> e % 2);
 System.out.println("\nGroup by (grouping values pair and odd):");
-result.groupBy(e -> e % 2)
-      .foreach(System.out::println);
+group.foreach(System.out::println);
 ```
 
 ``Group by (grouping values pair and odd):``
