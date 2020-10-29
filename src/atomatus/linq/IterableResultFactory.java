@@ -42,7 +42,7 @@ final class IterableResultFactory {
         return new IterableResultGroup<K, V>() {
             @Override
             protected IterableResultGroup.IteratorGroup<K, V> initIterator() {
-                return IteratorForGroup.getInstanceForIterator(iteratorFun, groupFun);
+                return new IteratorForGroup<>(iteratorFun, groupFun);
             }
         };
     }
@@ -52,7 +52,7 @@ final class IterableResultFactory {
         return new IterableResultGroup<K, V>() {
             @Override
             protected IterableResultGroup.IteratorGroup<K, V> initIterator() {
-                return IteratorForGroup.getInstanceForArray(arr, groupFun);
+                return new IteratorForGroup<>(arr, groupFun);
             }
         };
     }

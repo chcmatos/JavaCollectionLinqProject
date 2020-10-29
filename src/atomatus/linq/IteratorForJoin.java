@@ -35,6 +35,7 @@ final class IteratorForJoin {
             return "";
         }
 
+        //noinspection DuplicatedCode
         prefix = prefix == null ? "" : prefix;
         suffix = suffix == null ? "" : suffix;
         separator = separator == null ? "" : separator;
@@ -66,6 +67,7 @@ final class IteratorForJoin {
             return "";
         }
 
+        //noinspection DuplicatedCode
         prefix = prefix == null ? "" : prefix;
         suffix = suffix == null ? "" : suffix;
         separator = separator == null ? "" : separator;

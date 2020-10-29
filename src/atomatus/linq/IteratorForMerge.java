@@ -24,7 +24,7 @@ final class IteratorForMerge<I> implements Iterator<I> {
 
     IteratorForMerge(I[] arr, Iterable<? extends I>[] args) {
         this(args);
-        this.curr = new IteratorForSelectArray<>(arr, (e) -> e);
+        this.curr = new IteratorForSelectArray<>(arr);
     }
 
     @Override

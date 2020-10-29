@@ -135,7 +135,7 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
     }
 
     private Iterator<Map.Entry<K, V>> getIterator() {
-        checkInit();
+        checkInitIterator();
         return iterator;
     }
 
@@ -144,6 +144,12 @@ abstract class IteratorForMap<K, V> implements IterableResultMap.IteratorMap<K, 
     private synchronized void checkInit() {
         if (result == null) {
             result = this.initResult();
+        }
+    }
+
+    private synchronized void checkInitIterator(){
+        if(iterator == null) {
+            checkInit();
             iterator = result.entrySet().iterator();
         }
     }

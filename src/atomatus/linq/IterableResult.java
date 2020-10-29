@@ -129,7 +129,7 @@ public abstract class IterableResult<E> implements Iterable<E> {
         }
 
         Iterable<E>[] arr = CollectionHelper.select(args,
-                e -> (Iterable<E>) () -> new IteratorForSelectArray<>(e, j -> j)).toArray();
+                e -> (Iterable<E>) () -> new IteratorForSelectArray<>(e)).toArray();
         return intersection(arr);
     }
 

@@ -1,80 +1,30 @@
 package atomatus.linq;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 
 
-abstract class IteratorForGroup<K, V> extends IteratorForMap<K, Iterable<V>> implements IterableResultGroup.IteratorGroup<K, V> {
+final class IteratorForGroup<K, V> extends IteratorForMap<K, IterableResult<V>> implements IterableResultGroup.IteratorGroup<K, V> {
 
-    //region getInstanceForGroupImpl
-    private static class IteratorForGroupImpl<G, E> extends IteratorForGroup<G, E> {
+    private final CollectionHelper.FunctionGet<Iterator<V>> iteratorFun;
+    private final CollectionHelper.FunctionMount<V, K> groupFun;
 
-        private final CollectionHelper.FunctionGet<Iterator<E>> iteratorFun;
-        private final CollectionHelper.FunctionMount<E, G> groupFun;
-
-        IteratorForGroupImpl(CollectionHelper.FunctionGet<Iterator<E>> iteratorFun,
-                             CollectionHelper.FunctionMount<E, G> groupFun) {
-            this.iteratorFun = Objects.requireNonNull(iteratorFun);
-            this.groupFun = Objects.requireNonNull(groupFun);
-        }
-
-        @Override
-        @SuppressWarnings("All")
-        protected Map<G, Iterable<E>> initResult() {
-            Map<G, Iterable<E>> map = new HashMap<>();
-            Iterator<E> iterator = iteratorFun.get();
-            while (iterator.hasNext()) {
-                E v = iterator.next();
-                G k = groupFun.mount(v);
-                Iterable<E> list = map.get(k);
-                if (list == null) {
-                    map.put(k, list = new ArrayList<>());
-                }
-                ((List<E>) list).add(v);
-            }
-            return map;
-        }
+    IteratorForGroup(CollectionHelper.FunctionGet<Iterator<V>> iteratorFun,
+                              CollectionHelper.FunctionMount<V, K> groupFun){
+        this.iteratorFun = Objects.requireNonNull(iteratorFun);
+        this.groupFun = Objects.requireNonNull(groupFun);
     }
 
-    private static class IteratorForGroupImplArray<G, E> extends IteratorForGroup<G, E> {
-
-        private final E[] arr;
-        private final CollectionHelper.FunctionMount<E, G> groupFun;
-
-        IteratorForGroupImplArray(E[] arr, CollectionHelper.FunctionMount<E, G> groupFun) {
-            this.arr = Objects.requireNonNull(arr);
-            this.groupFun = Objects.requireNonNull(groupFun);
-        }
-
-        @Override
-        @SuppressWarnings("All")
-        protected Map<G, Iterable<E>> initResult() {
-            Map<G, Iterable<E>> map = new HashMap<>();
-            for (E v : arr) {
-                G k = groupFun.mount(v);
-                Iterable<E> list = map.get(k);
-                if (list == null) {
-                    map.put(k, list = new ArrayList<>());
-                }
-                ((List<E>) list).add(v);
-            }
-            return map;
-        }
+    IteratorForGroup(V[] arr, CollectionHelper.FunctionMount<V, K> groupFun){
+        this(() -> new IteratorForSelectArray<>(arr), groupFun);
     }
 
-    static <G, E> IteratorForGroup<G, E> getInstanceForIterator(
-            CollectionHelper.FunctionGet<Iterator<E>> iteratorFun,
-            CollectionHelper.FunctionMount<E, G> groupFun) {
-        return new IteratorForGroupImpl<>(iteratorFun, groupFun);
+    @Override
+    protected Map<K, IterableResult<V>> initResult() {
+        return new IterableMapForFunctionGet<>(iteratorFun, groupFun);
     }
 
-    static <G, E> IteratorForGroup<G, E> getInstanceForArray(
-            E[] arr,
-            CollectionHelper.FunctionMount<E, G> groupFun) {
-        return new IteratorForGroupImplArray<>(arr, groupFun);
-    }
-    //endregion
-
-    //region Impl
     private <IN, OUT> Map.Entry<K, OUT> getEntryMountValueOnRequest(Map.Entry<K, IN> entry,
                                                                     CollectionHelper.FunctionMount<IN, OUT> mountFun) {
         return new Map.Entry<K, OUT>() {
@@ -107,7 +57,7 @@ abstract class IteratorForGroup<K, V> extends IteratorForMap<K, Iterable<V>> imp
     }
 
 
-    private <N> IterableResultMap<K, N> calc(CollectionHelper.FunctionMount<Iterable<V>, N> calcFun) {
+    private <N> IterableResultMap<K, N> calc(CollectionHelper.FunctionMount<IterableResult<V>, N> calcFun) {
         return new IterableResultMap<K, N>() {
             @Override
             protected IterableResultMap.IteratorMap<K, N> initIterator() {
@@ -234,15 +184,14 @@ abstract class IteratorForGroup<K, V> extends IteratorForMap<K, Iterable<V>> imp
      * @return minimum value
      */
     @Override
-    public <C extends Comparable> IterableResultMap<K, V> min(CollectionHelper.FunctionMount<V, C> mountFun) {
+    public <C extends Comparable<C>> IterableResultMap<K, V> min(CollectionHelper.FunctionMount<V, C> mountFun) {
         Objects.requireNonNull(mountFun);
         return calc(list -> IteratorForMath.min(list.iterator(), (v) -> new Comparable<C>() {
-            V value = v;
-            C c = mountFun.mount(v);
+            final V value = v;
+            final C c = mountFun.mount(v);
 
             @Override
             public int compareTo(C o) {
-                //noinspection unchecked
                 return o.compareTo(c);
             }
         }).value);
@@ -266,18 +215,16 @@ abstract class IteratorForGroup<K, V> extends IteratorForMap<K, Iterable<V>> imp
      * @return maximum value
      */
     @Override
-    public <C extends Comparable> IterableResultMap<K, V> max(CollectionHelper.FunctionMount<V, C> mountFun) {
+    public <C extends Comparable<C>> IterableResultMap<K, V> max(CollectionHelper.FunctionMount<V, C> mountFun) {
         Objects.requireNonNull(mountFun);
         return calc(list -> IteratorForMath.max(list.iterator(), (v) -> new Comparable<C>() {
-            V value = v;
-            C c = mountFun.mount(v);
+            final V value = v;
+            final C c = mountFun.mount(v);
 
             @Override
             public int compareTo(C o) {
-                //noinspection unchecked
                 return o.compareTo(c);
             }
         }).value);
     }
-    //endregion
 }
