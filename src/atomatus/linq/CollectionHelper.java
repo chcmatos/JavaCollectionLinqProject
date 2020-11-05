@@ -98,6 +98,14 @@ public final class CollectionHelper {
     public interface FunctionReduce<IN, OUT> {
         OUT reduce(OUT acc, IN curr);
     }
+
+    /**
+     * Compare function.
+     * @param <E>
+     */
+    public interface FunctionComparer<E> {
+        boolean compare(E e0, E e1);
+    }
     //endregion
 
     //region toArray
@@ -340,6 +348,157 @@ public final class CollectionHelper {
         Set<E> set = new HashSet<>();
         foreach(arr, set::add);
         return set;
+    }
+    //endregion
+
+    //region repeat
+    private static <I, E> E[] loop(int count, I seed, FunctionMount<I, E> mountFun, FunctionGet<E> getFun) {
+        if (count <= 0) throw new IllegalArgumentException("Count can not be less then one!");
+        E[] arr = copyOf(count, seed == null ? getFun.get() : mountFun.mount(seed));
+        for (int i = 1; i < count; i++) arr[i] = seed == null ? getFun.get() : mountFun.mount(seed);
+        return arr;
+    }
+
+    /**
+     * Generate an array with result of mounFun execution for each index.
+     * @param count array size
+     * @param seed input function seed.
+     * @param mountFun function to generate element for each index.
+     * @param <I> seed type
+     * @param <E> element type
+     * @return array generated.
+     */
+    public static <I, E> E[] repeat(int count, I seed, FunctionMount<I, E> mountFun) {
+        return loop(count, seed, mountFun, null);
+    }
+
+    /**
+     * Generate an array with result of mounFun execution for each index.
+     * @param count array size
+     * @param mountFun function to generate element for each index.
+     * @param <E> element type
+     * @return array generated.
+     */
+    public static <E> E[] repeat(int count, FunctionGet<E> mountFun) {
+        return loop(count, null, null, mountFun);
+    }
+
+    /**
+     * Generate an array with result of mounFun execution for each index.
+     * @param count array size
+     * @param mountFun function to generate element for each index.
+     * @param <E> element type
+     * @return array generated.
+     */
+    public static <E> E[] repeat(int count, FunctionMount<Integer, E> mountFun) {
+        return repeat(count, count, mountFun);
+    }
+
+    /**
+     * Generate a random array of number type specified.
+     * @param count array size
+     * @param clazz element number type
+     * @param <E> element type
+     * @return array generated.
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends Number> E[] random(int count, Class<E> clazz) {
+        if(clazz == Integer.class) {
+            return  (E[]) repeat(count, count, new Random()::nextInt);
+        } else if(clazz == Short.class) {
+            Random r = new Random();
+            return  (E[]) repeat(count, Math.min(Short.MAX_VALUE, count), (i) -> (short) r.nextInt(i));
+        } else if(clazz == Long.class) {
+            return (E[]) repeat(count, new Random()::nextLong);
+        } else if(clazz == Double.class) {
+            return (E[]) repeat(count, new Random()::nextDouble);
+        } else if(clazz == Float.class) {
+            return (E[]) repeat(count, new Random()::nextFloat);
+        } else if(clazz == Byte.class) {
+            Byte[] bytes = new Byte[count];
+            Random r = new Random();
+            for (int i = 0, len = bytes.length; i < len; ) {
+                for (int rnd = r.nextInt(), n = Math.min(len - i, Integer.SIZE / Byte.SIZE); n-- > 0; rnd >>= Byte.SIZE) {
+                    bytes[i++] = (byte) rnd;
+                }
+            }
+            return (E[]) bytes;
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+    //endregion
+
+    //region sequence
+    private static <E extends Number> E[] sequence(int count, E start, E add, Class<E> clazz, FunctionReduce<E, E> addFun){
+        if(count <= 0){
+            throw new IllegalArgumentException("Count can not be less then one!");
+        }
+        E[] arr = copyOf(count, start);
+        E curr = start;
+        for(int i = 1; i < count; i++) {
+            curr = arr[i] = addFun.reduce(curr, add);
+        }
+        return arr;
+    }
+
+    /**
+     * Generate an array with a sequence of values specified.
+     * @param count array size
+     * @param start start value
+     * @param add add value for each new input.
+     * @param clazz element number type
+     * @param <E> element type
+     * @return a generated sequence array.
+     */
+    @SuppressWarnings("unchecked")
+    public static <E extends Number> E[] sequence(int count, E start, E add, Class<E> clazz) {
+        return sequence(count, start, add, clazz,
+                clazz == Short.class ? (c, a) -> (E) Integer.valueOf(c.shortValue() + a.shortValue()) :
+                        clazz == Integer.class ? (c, a) -> (E) Integer.valueOf(c.intValue() + a.intValue()) :
+                                clazz == Long.class ? (c, a) -> (E) Long.valueOf(c.longValue() + a.longValue()) :
+                                        clazz == Float.class ? (c, a) -> (E) Float.valueOf(c.floatValue() + a.floatValue()) :
+                                                clazz == Double.class ? (c, a) -> (E) Double.valueOf(c.doubleValue() + a.doubleValue()) :
+                                                        (c, a) -> (E) Byte.valueOf((byte)(c.byteValue() + a.byteValue())));
+    }
+
+    /**
+     * Generate an array with a sequence of values specified.
+     * @param count array size
+     * @param start start value
+     * @param clazz element number type
+     * @param <E> element type
+     * @return a generated sequence array.
+     */
+    public static <E extends Number> E[] sequence(int count, E start, Class<E> clazz) {
+        return sequence(count, start, valueNumberOne(clazz), clazz);
+    }
+
+    /**
+     * Generate an array with a sequence of values specified.
+     * @param count array size
+     * @param clazz element number type
+     * @param <E> element type
+     * @return a generated sequence array.
+     */
+    public static <E extends Number> E[] sequence(int count, Class<E> clazz) {
+        return sequence(count, valueNumberZero(clazz), clazz);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Number> E valueNumberZero(Class<E> clazz) {
+        return (E) (clazz == Short.class || clazz == Integer.class ? (Number) 0 :
+                clazz == Long.class ? (Number) 0L :
+                        clazz == Float.class ? (Number) 0F :
+                                clazz == Double.class ? 0D : 0x0);
+    }
+
+    @SuppressWarnings("unchecked")
+    private static <E extends Number> E valueNumberOne(Class<E> clazz) {
+        return (E) (clazz == Short.class || clazz == Integer.class ? (Number) 1 :
+                        clazz == Long.class ? (Number) 1L :
+                                clazz == Float.class ? (Number) 1F :
+                                        clazz == Double.class ? 1D : 0x1);
     }
     //endregion
 

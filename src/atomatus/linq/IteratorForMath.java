@@ -146,12 +146,14 @@ final class IteratorForMath {
     //region sum
     static <IN, OUT extends Number> OUT sum(Iterator<IN> iterator, CollectionHelper.FunctionMount<IN, OUT> fun) {
         Objects.requireNonNull(fun);
-        return IteratorForReduce.reduce(iterator, (acc, curr) -> sum(acc, fun.mount(curr)), null);
+        return IteratorForReduce.reduce(iterator, (acc, curr) -> sum(acc, fun.mount(curr)),
+                fun.mount(iterator.hasNext() ? iterator.next() : null));
     }
 
     static <IN, OUT extends Number> OUT sum(IN[] arr, CollectionHelper.FunctionMount<IN, OUT> fun) {
         Objects.requireNonNull(fun);
-        return IteratorForReduce.reduce(arr, (acc, curr) -> sum(acc, fun.mount(curr)), null);
+        return IteratorForReduce.reduce(arr, (acc, curr) -> sum(acc, fun.mount(curr)),
+                fun.mount(arr.length > 0 ? arr[0] : null));
     }
 
     static <IN extends Number> IN sum(Iterator<IN> iterator) {
@@ -289,6 +291,7 @@ final class IteratorForMath {
     //endregion
 
     //region min
+    @SuppressWarnings("rawtypes")
     private static <E> int compare(E e0, E e1) {
         return e0 == null ? (e1 == null ? 0 : -1) :
                 (e1 == null ? 1 :

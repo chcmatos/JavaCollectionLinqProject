@@ -10,12 +10,7 @@ package atomatus.linq;
  */
 public abstract class IterableResultGroup<K, V> extends IterableResultMap<K, IterableResult<V>> {
 
-    interface IteratorGroup<K, V> extends IterableResultMap.IteratorMap<K, IterableResult<V>> {
-
-        IterableResult<K> keySet();
-
-        IterableResult<IterableResult<V>> values();
-
+    interface IteratorGroupCalculator<K, V> {
         IterableResultMap<K, Integer> size();
 
         <N extends Number> IterableResultMap<K, N> sum(Class<N> resultClass);
@@ -37,6 +32,17 @@ public abstract class IterableResultGroup<K, V> extends IterableResultMap<K, Ite
         IterableResultMap<K, V> max();
 
         <C extends Comparable<C>> IterableResultMap<K, V> max(CollectionHelper.FunctionMount<V, C> mountFun);
+
+        IterableResultGroup<K, V> sample(CollectionHelper.CompareEntryValid<K> checkFun);
+
+        IterableResultGroup<K, V> amount(int count);
+    }
+
+    protected interface IteratorGroup<K, V> extends IteratorGroupCalculator<K, V>, IterableResultMap.IteratorMap<K, IterableResult<V>> {
+
+        IterableResult<K> keySet();
+
+        IterableResult<IterableResult<V>> values();
     }
 
     protected abstract IteratorGroup<K, V> initIterator();
@@ -44,7 +50,6 @@ public abstract class IterableResultGroup<K, V> extends IterableResultMap<K, Ite
     protected IteratorGroup<K, V> getIteratorAsGroup() {
         return (IteratorGroup<K, V>) super.getIterator();
     }
-
 
     //region IteratorGroup Actions
 
@@ -180,6 +185,58 @@ public abstract class IterableResultGroup<K, V> extends IterableResultMap<K, Ite
      */
     public final <C extends Comparable<C>> IterableResultMap<K, V> max(CollectionHelper.FunctionMount<V, C> mountFun) {
         return getIteratorAsGroup().max(mountFun);
+    }
+
+    /**
+     * Filter current group to get only dessired sample (key-values).
+     * @param checkFun function to filter and recover only dessired sample.
+     * @return new group with filtered values.
+     */
+    public final IterableResultGroup<K, V> sample(CollectionHelper.CompareEntryValid<K> checkFun) {
+        return getIteratorAsGroup().sample(checkFun);
+    }
+
+    /**
+     * Filter current group to get only dessired sample (key-values).
+     * @param keys key names to filter and recover only dessired sample.
+     * @return new group with filtered values.
+     */
+    @SafeVarargs
+    public final IterableResultGroup<K, V> sample(K... keys) {
+        if(keys.length == 0){
+            throw new IllegalArgumentException("Key name not set!");
+        }
+        return getIteratorAsGroup().sample(k0 -> CollectionHelper.any(keys, k1 -> equalsKeys(k0, k1)));
+    }
+
+    /**
+     * Filter current group setting max amount.
+     * @param count max amount.
+     * @return a new iterable group with max amount.
+     */
+    public final IterableResultGroup<K, V> amount(int count) {
+        if(count < 1) {
+            throw new IllegalArgumentException("Count can not be less then 1!");
+        }
+        return getIteratorAsGroup().amount(count);
+    }
+
+    private boolean equalsKeys(K k0, K k1) {
+        return k0 == k1 || (
+                k0 instanceof String &&
+                        k1 instanceof String ?
+                        equalsIgnoreCase((String) k0, (String) k1) :
+                        k0.equals(k1));
+    }
+
+    private boolean equalsIgnoreCase(String str, String anotherString) {
+        //noinspection StringEquality
+        return str == anotherString ||
+                (str != null &&
+                        anotherString != null &&
+                        str.length() == anotherString.length() &&
+                        str.regionMatches(true, 0, anotherString, 0, str.length())
+                );
     }
     //endregion
 }

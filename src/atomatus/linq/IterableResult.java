@@ -72,6 +72,14 @@ public abstract class IterableResult<E> implements Iterable<E> {
     }
 
     /**
+     * Generate an iterable result grouping elements by equals objects.
+     * @return an instance of iterable result group whithin set values grouped by equals objects.
+     */
+    public IterableResultGroup<E, E> group() {
+        return CollectionHelper.groupBy(this, e -> e);
+    }
+
+    /**
      * Generate an iterable result within a set of values recovered from mount function.
      *
      * @param mount mount function to get new data
@@ -89,7 +97,7 @@ public abstract class IterableResult<E> implements Iterable<E> {
      * @return new iterable result.
      */
     @SafeVarargs
-    public final Iterable<E> merge(Iterable<? extends E>... args) {
+    public final IterableResult<E> merge(Iterable<? extends E>... args) {
         return IterableResultFactory.getInstanceForMerge(this, args);
     }
 
@@ -100,7 +108,7 @@ public abstract class IterableResult<E> implements Iterable<E> {
      * @return new iterable result.
      */
     @SafeVarargs
-    public final Iterable<E> merge(E[]... args) {
+    public final IterableResult<E> merge(E[]... args) {
         return IterableResultFactory.getInstanceForMergeArray(this, args);
     }
 
@@ -333,6 +341,15 @@ public abstract class IterableResult<E> implements Iterable<E> {
     }
 
     /**
+     * A simple foreach action.
+     *
+     * @param action action to recover each element on collection
+     */
+    public void foreachI(CollectionHelper.ForEachIterableEntryConsumer<E> action) {
+        CollectionHelper.foreach(this, action);
+    }
+
+    /**
      * Check if all elements on iterable pass on test action.
      *
      * @param action check pass action
@@ -369,5 +386,10 @@ public abstract class IterableResult<E> implements Iterable<E> {
      */
     public String join() {
         return IteratorForJoin.join(null, null, ", ", this);
+    }
+
+    @Override
+    public String toString() {
+        return IteratorForJoin.join("[", "]", ", ", this);
     }
 }

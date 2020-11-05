@@ -27,6 +27,14 @@ public abstract class IterableResultMap<K, V> implements Iterable<Map.Entry<K, V
         Map<K, V> toMap();
 
         Set<Map.Entry<K, V>> toSet();
+
+        V get(K key);
+
+        Map.Entry<K, V> minEntry();
+
+        Map.Entry<K, V> maxEntry();
+
+        void foreach(CollectionHelper.ForEachEntryConsumer<Map.Entry<K, V>> action);
     }
 
     private IteratorMap<K, V> iterator;
@@ -43,6 +51,11 @@ public abstract class IterableResultMap<K, V> implements Iterable<Map.Entry<K, V
     @Override
     public final Iterator<Map.Entry<K, V>> iterator() {
         return getIterator();
+    }
+
+    @Override
+    public String toString() {
+        return this.toMap().toString();
     }
 
     /**
@@ -109,11 +122,36 @@ public abstract class IterableResultMap<K, V> implements Iterable<Map.Entry<K, V
     }
 
     /**
+     * Recover value by key.
+     * @param key access key.
+     * @return value indexed to key.
+     */
+    public V get(K key) {
+        return getIterator().get(key);
+    }
+
+    /**
+     * Recovery min entry value (compare only values) on result map.
+     * @return
+     */
+    public Map.Entry<K, V> minEntry() {
+        return getIterator().minEntry();
+    }
+
+    /**
+     * Recovery max entry value (compare only values) on result map.
+     * @return
+     */
+    public Map.Entry<K, V> maxEntry() {
+        return getIterator().maxEntry();
+    }
+
+    /**
      * A simple foreach action.
      *
      * @param action action to recover each element on collection
      */
     public void foreach(CollectionHelper.ForEachEntryConsumer<Map.Entry<K, V>> action) {
-        CollectionHelper.foreach(this, action);
+        getIterator().foreach(action);
     }
 }
