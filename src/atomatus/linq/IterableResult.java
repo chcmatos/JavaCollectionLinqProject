@@ -332,6 +332,16 @@ public abstract class IterableResult<E> implements Iterable<E> {
     }
 
     /**
+     * Count element by condition.
+     *
+     * @param where condition to accept count element
+     * @return count of element into condition.
+     */
+    public int count(CollectionHelper.CompareEntryValid<E> where) {
+        return CollectionHelper.count(this, where);
+    }
+
+    /**
      * A simple foreach action.
      *
      * @param action action to recover each element on collection

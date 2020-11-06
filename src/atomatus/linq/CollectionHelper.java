@@ -1739,6 +1739,44 @@ public final class CollectionHelper {
             return c;
         }
     }
+
+    /**
+     * Count element by condition.
+     * @param set target
+     * @param where condition to accept count element
+     * @param <E> element type
+     * @return count of element into condition.
+     */
+    public static <E> int count(Iterable<E> set, CompareEntryValid<E> where) {
+        Objects.requireNonNull(set);
+        Objects.requireNonNull(where);
+        int count = 0;
+        for(E e : set) {
+            if(where.isValid(e)) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    /**
+     * Count element by condition.
+     * @param arr target
+     * @param where condition to accept count element
+     * @param <E> element type
+     * @return count of element into condition.
+     */
+    public static <E> int count(E[] arr, CompareEntryValid<E> where) {
+        Objects.requireNonNull(arr);
+        Objects.requireNonNull(where);
+        int count = 0;
+        for(E e : arr) {
+            if(where.isValid(e)) {
+                count++;
+            }
+        }
+        return count;
+    }
     //endregion
 
     //region join
