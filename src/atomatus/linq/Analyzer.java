@@ -3,6 +3,7 @@ package atomatus.linq;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
 import java.util.Objects;
 
 /**
@@ -15,8 +16,10 @@ public abstract class Analyzer extends IterableResultGroup<String, String> imple
     protected static final char EMPTY_SEPARATOR_CHAR;
 
     private String filename;
+    private Charset charset;
     private char separatorChar;
     private boolean closed;
+    private final boolean localFile;
     private final boolean requestSeparatorChar;
 
     //region load
@@ -85,9 +88,11 @@ public abstract class Analyzer extends IterableResultGroup<String, String> imple
     }
 
     protected Analyzer(String filename, char separatorChar, boolean requestSeparatorChar) {
-        this.filename               = requestFileExists(filename);
+        this.localFile              = isLocalFile(filename);
+        this.filename               = localFile ? requestFileExists(filename) : filename;
         this.separatorChar          = separatorChar;
         this.requestSeparatorChar   = requestSeparatorChar;
+        this.charset                = Charset.defaultCharset();
     }
 
     protected Analyzer(String filename) {
@@ -95,9 +100,21 @@ public abstract class Analyzer extends IterableResultGroup<String, String> imple
     }
 
     //region filename and separatorChar
+    protected boolean isLocalFile() {
+        return localFile;
+    }
+
     protected String getFilename() {
         this.requireNonClosed();
         return filename;
+    }
+
+    protected Charset getCharset() {
+        return charset;
+    }
+
+    private void setCharset(Charset charset) {
+        this.charset = Objects.requireNonNull(charset);
     }
 
     protected char getSeparatorChar() {
@@ -118,13 +135,25 @@ public abstract class Analyzer extends IterableResultGroup<String, String> imple
     }
 
     protected String requestFileExists(String filename) {
-        File file = new File(Objects.requireNonNull(filename));
+        File file = new File(filename);
         if(!file.exists()) {
             throw new RuntimeException(new FileNotFoundException("File not exists!"));
         } else if(!file.canRead()) {
             throw new RuntimeException("No file read permission!");
+        } else{
+            return filename;
         }
-        return filename;
+    }
+
+    private boolean isLocalFile(String filename) {
+        String aux = Objects.requireNonNull(filename).toLowerCase();
+        String[] schemes = new String[]{ "https://", "http://", "file://" };
+        for(String s : schemes) {
+            if(aux.startsWith(s)) {
+                return false;
+            }
+        }
+        return true;
     }
     //endregion
 

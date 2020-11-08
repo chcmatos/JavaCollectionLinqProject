@@ -1,9 +1,8 @@
 package atomatus.linq;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.*;
 
 /**
@@ -180,12 +179,32 @@ abstract class AnalyzerForSepChar extends Analyzer {
                 }
             }
             else if(reader == null) {
-                try {
-                    reader = new BufferedReader(new FileReader(getFilename()));
-                    isOpen = true;
-                } catch (FileNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
+                reader = initReaderFromFilename();
+                isOpen = true;
+            }
+        }
+
+        private BufferedReader initReaderFromFilename() {
+            return isLocalFile() ? initReaderForLocal() : initReaderForUrl();
+        }
+
+        private BufferedReader initReaderForUrl(){
+            try {
+                String charset = getCharset().name();
+                URLConnection connection = new URL(getFilename()).openConnection();
+                connection.setRequestProperty("Accept-Charset", charset);
+                InputStream response = connection.getInputStream();
+                return new BufferedReader(new InputStreamReader(response, charset));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private BufferedReader initReaderForLocal() {
+            try {
+                return new BufferedReader(new FileReader(getFilename()));
+            } catch (FileNotFoundException e) {
+                throw new RuntimeException(e);
             }
         }
 
@@ -216,13 +235,11 @@ abstract class AnalyzerForSepChar extends Analyzer {
             boolean ready = nextLine != null;
             if(!ready) {
                 try {
-                    if (isOpen && (ready = reader.ready())) {
+                    if (isOpen) {
                         nextLine = reader.readLine();
                         ready = nextLine != null && nextLine.length() != 0;
                     }
-                } catch (IOException ignored) {
-                    ready = false;
-                } finally {
+                } catch (IOException ignored) { } finally {
                     if (!ready) {
                         closeReader();
                     }
@@ -333,7 +350,7 @@ abstract class AnalyzerForSepChar extends Analyzer {
                     return count = lineIndex;
                 } else {
                     int lines = 0;
-                    try (BufferedReader reader = new BufferedReader(new FileReader(getFilename()))) {
+                    try (BufferedReader reader = initReaderFromFilename()) {
                         while (reader.readLine() != null) lines++;
                     } catch (IOException ignored) { }
                     return count = lines;

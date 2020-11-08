@@ -1,15 +1,16 @@
-# Java Collection Linq Project
-
-A library to helper developer manipulate iterables collections or arrays, 
+# Java Collection Analyzer and Linq Project
+<p>
+A library to help developer manipulate iterables collections or arrays, 
 how like, linq principle to select, find, filter, group and manipulate elements 
-on theses set. You can generate map groups to help data analyses, 
+on these set. You can generate map groups to help data analyses, 
 checking elements by conditions on set, filtering data or applying simple math 
 operations.
+</p>
 
 ## Iterable Result
-All request generate a type of iterable result, each iterable result is not result of execution operation in time, 
-but a scheduled of execution thats will be applied only when iterator is request, forced by method iterator(), or 
-iteration in loop.
+All request generates a type of iterable result, each iterable result is not result of execution operation in time, 
+but a scheduled of execution that's will be applied only when iterator is request, forced by method iterator(), or 
+iteration in a loop.
 
 ### IterableResult
 Simple iterable result contained methods to schedule new manipulate action on future elements result.
@@ -18,7 +19,7 @@ Simple iterable result contained methods to schedule new manipulate action on fu
 Iterable result for elements grouped, each group contains the proposed key and set of elements how values of each key. 
 
 ### IterableResultMap
-Iterable result map thats is base class of iterableResultGroup, contains methods
+Iterable result map that is base class of iterableResultGroup, contains methods
 to filter and manipulate like a dictionary.
 
 ### CollectionHelper
@@ -185,3 +186,15 @@ System.out.println(CollectionHelper.all(arr1, e -> e % 2 == 0));
 ``All (values pair in arr0): true``
 
 ``All (values pair in arr1): false``
+
+##Analyzer
+Last but not least, Analyzer. These class can be used to load spreadsheets files (from local system disk or using https://, http:// or file:// protocol), how like, CSV to 
+analize and manipulate data. Generating IterableResult, IterableResultGroup, IterableResultMap.
+
+```
+//Example, analyzing how many patients have obesity.
+//obs.: real data of patients with respiratory conditions between years 2018 and 2019 in Brazil.
+try(Analyzer a = Analyzer.load("https://raw.githubusercontent.com/chcmatos/nanodegree_py_analyze_srag/main/doc/influd18_limpo-final.csv")) {
+    System.out.printf("Were found %d patients having obesity.", a.get("OBESIDADE").asInteger().count(e -> e == 1));
+}
+```
