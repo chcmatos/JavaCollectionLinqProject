@@ -1,4 +1,4 @@
-# Java Collection Analyzer and Linq Project
+# Java Collection Linq and Analyzer Project
 <p>
 A library to help developer manipulate iterables collections or arrays, 
 how like, linq principle to select, find, filter, group and manipulate elements 
