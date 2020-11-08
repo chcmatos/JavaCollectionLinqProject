@@ -1,5 +1,10 @@
 package atomatus.linq;
 
+import atomatus.util.DateHelper;
+import atomatus.util.DecimalHelper;
+
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -351,7 +356,7 @@ public abstract class IterableResult<E> implements Iterable<E> {
     }
 
     /**
-     * A simple foreach action.
+     * A simple foreach action with index.
      *
      * @param action action to recover each element on collection
      */
@@ -396,6 +401,81 @@ public abstract class IterableResult<E> implements Iterable<E> {
      */
     public String join() {
         return IteratorForJoin.join(null, null, ", ", this);
+    }
+
+    private <W> IterableResult<W> asWrapper(W defaultValue,
+        CollectionHelper.FunctionMount<Number, W> fromNumber,
+        CollectionHelper.FunctionMount<String, W> fromString) {
+        return this.select(e -> {
+            if(e == null) {
+                return defaultValue;
+            } else if(e instanceof Number){
+                return fromNumber.mount((Number)e);
+            } else {
+                String aux = e.toString();
+                return aux.length() > 0 ? fromString.mount(aux) : defaultValue;
+            }
+        });
+    }
+
+    /**
+     * Convert current result values to Integer (default value is 0).
+     * @return
+     */
+    public IterableResult<Integer> asInteger() {
+        return asWrapper(0,
+                Number::intValue,
+                Integer::parseInt);
+    }
+
+    /**
+     * Convert current result values to Long (default value is 0).
+     * @return
+     */
+    public IterableResult<Long> asLong() {
+        return asWrapper(0L,
+                Number::longValue,
+                Long::parseLong);
+    }
+
+    /**
+     * Convert current result values to Float (default value is 0).
+     * @return
+     */
+    public IterableResult<Float> asFloat() {
+        return asWrapper(0f,
+                Number::floatValue,
+                Float::parseFloat);
+    }
+
+    /**
+     * Convert current result values to Double (default value is 0).
+     * @return
+     */
+    public IterableResult<Double> asDouble() {
+        return asWrapper(0d,
+                Number::doubleValue,
+                Double::parseDouble);
+    }
+
+    /**
+     * Convert current result values to BigDecimal (default value is BigDecimal.Zero).
+     * @return
+     */
+    public IterableResult<BigDecimal> asBigDecimal() {
+        return asWrapper(BigDecimal.ZERO,
+                DecimalHelper::toBigDecimal,
+                DecimalHelper::toBigDecimal);
+    }
+
+    /**
+     * Convert current result values to Date (default value is null).
+     * @return
+     */
+    public IterableResult<Date> asDate() {
+        return asWrapper(null,
+                n -> new Date(n.longValue()),
+                DateHelper.getInstance()::parseDate);
     }
 
     @Override
