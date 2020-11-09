@@ -173,12 +173,11 @@ abstract class AnalyzerForSepChar extends Analyzer {
         }
 
         private void checkInit(boolean isThrowsException) {
-            if(isClosed){
+            if(isClosed) {
                 if(isThrowsException) {
                     throw new UnsupportedOperationException("Iterator for Analyser is closed!");
                 }
-            }
-            else if(reader == null) {
+            } else if(reader == null) {
                 reader = initReaderFromFilename();
                 isOpen = true;
             }
